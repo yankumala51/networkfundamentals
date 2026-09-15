@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Network Fundamentals Interactive Trainer - MTCNA</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Plus Jakarta Sans', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .custom-scrollbar::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+            background: #1e293b;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+            background: #475569;
+            border-radius: 4px;
+        }
+        .layer-card {
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .layer-card:hover {
+            transform: translateX(6px);
+        }
+    </style>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-brand-500 selection:text-white">
+
+    <!-- Top Navigation Header -->
+    <header class="border-b border-slate-800 bg-slate-900/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center space-x-3">
+                <div class="bg-gradient-to-tr from-brand-600 to-indigo-500 p-2.5 rounded-xl shadow-lg shadow-brand-500/20">
+                    <i data-lucide="network" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-white leading-tight">Network Fundamentals</h1>
+                    <p class="text-xs text-brand-500 font-medium">MikroTik Certified Network Associate (MTCNA)</p>
+                </div>
+            </div>
+            
+            <div class="hidden md:flex items-center space-x-2 text-xs font-medium">
+                <span class="px-3 py-1 rounded-full bg-slate-800 text-slate-300 border border-slate-700 flex items-center gap-1.5">
+                    <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span> Mode Interaktif
+                </span>
+                <span class="px-3 py-1 rounded-full bg-brand-900/50 text-brand-300 border border-brand-700/50">
+                    Yan Kumala Edition
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col lg:flex-row gap-6">
+
+        <!-- Sidebar Navigation -->
+        <aside class="w-full lg:w-64 shrink-0 space-y-2">
+            <div class="text-xs font-semibold text-slate-400 uppercase tracking-wider px-3 mb-2">Navigasi Modul</div>
+            <nav class="space-y-1" id="nav-container">
+                <button onclick="switchTab('overview')" id="nav-overview" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm transition-all bg-brand-600 text-white shadow-lg shadow-brand-600/25">
+                    <i data-lucide="layout-dashboard" class="w-4 h-4"></i>
+                    <span>Ringkasan & Dashboard</span>
+                </button>
+                <button onclick="switchTab('osi')" id="nav-osi" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+                    <i data-lucide="layers" class="w-4 h-4"></i>
+                    <span>OSI vs TCP/IP Model</span>
+                </button>
+                <button onclick="switchTab('simulator')" id="nav-simulator" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+                    <i data-lucide="globe" class="w-4 h-4"></i>
+                    <span>Simulator Skala (LAN/MAN/WAN)</span>
+                </button>
+                <button onclick="switchTab('matrix')" id="nav-matrix" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+                    <i data-lucide="cpu" class="w-4 h-4"></i>
+                    <span>3 Elemen & Perangkat</span>
+                </button>
+                <button onclick="switchTab('quiz')" id="nav-quiz" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+                    <i data-lucide="help-circle" class="w-4 h-4"></i>
+                    <span>Kuis Evaluasi</span>
+                </button>
+                <button onclick="switchTab('terminal')" id="nav-terminal" class="nav-btn w-full flex items-center space-x-3 px-3.5 py-3 rounded-xl font-medium text-sm text-slate-400 hover:text-slate-200 hover:bg-slate-900 transition-all">
+                    <i data-lucide="terminal" class="w-4 h-4"></i>
+                    <span>CLI Terminal Lab</span>
+                </button>
+            </nav>
+
+            <!-- Status Card -->
+            <div class="mt-6 p-4 rounded-xl bg-slate-900/60 border border-slate-800 text-xs text-slate-400 space-y-2">
+                <div class="flex items-center justify-between text-slate-300 font-medium">
+                    <span>Progress Pembelajaran</span>
+                    <span id="overall-progress-text">0%</span>
+                </div>
+                <div class="w-full bg-slate-800 h-2 rounded-full overflow-hidden">
+                    <div id="overall-progress-bar" class="bg-gradient-to-r from-brand-500 to-emerald-400 h-full w-0 transition-all duration-500"></div>
+                </div>
+                <p class="text-[11px] text-slate-500 leading-relaxed">Selesaikan kuis & uji seluruh simulator untuk mencapai 100%.</p>
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <section class="flex-1 min-w-0">
+            
+            <div id="tab-overview" class="tab-content space-y-6">
+                <!-- Welcome Banner -->
+                <div class="relative overflow-hidden rounded-2xl bg-gradient-to-r from-brand-900 via-slate-900 to-indigo-950 p-6 sm:p-8 border border-brand-800/40 shadow-xl">
+                    <div class="relative z-10 max-w-2xl space-y-3">
+                        <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md bg-brand-500/10 text-brand-400 border border-brand-500/20 text-xs font-semibold">
+                            <i data-lucide="book-open" class="w-3.5 h-3.5"></i> Materi MTCNA - Yan Kumala
+                        </span>
+                        <h2 class="text-2xl sm:text-3xl font-bold text-white tracking-tight">Apa Itu Jaringan Komputer?</h2>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Jaringan merupakan sekumpulan perangkat jaringan (Network device) yang saling terhubung dengan perangkat endhost (end device) yang bertujuan agar seluruh perangkat dapat bertukar informasi satu sama lain secara efisien dan terstruktur.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- 3 Core Pillars Cards -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 hover:border-brand-500/40 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-blue-500/10 border border-blue-500/20 flex items-center justify-center text-blue-400 mb-3">
+                            <i data-lucide="hard-drive" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base mb-1">1. Device</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Perangkat fisik yang akan dihubungkan dalam jaringan. Contoh: Router, Switch, HUB, Firewall, PC, Laptop, IP Phone, Smartphone.
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 hover:border-emerald-500/40 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400 mb-3">
+                            <i data-lucide="cable" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base mb-1">2. Media</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Sarana penghubung antar perangkat. Menggunakan media fisik kabel (UTP, Fiber Optic) atau nirkabel (Wireless/Wi-Fi).
+                        </p>
+                    </div>
+                    <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 hover:border-purple-500/40 transition-all">
+                        <div class="w-10 h-10 rounded-lg bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400 mb-3">
+                            <i data-lucide="shield-check" class="w-5 h-5"></i>
+                        </div>
+                        <h3 class="font-bold text-white text-base mb-1">3. Rule (Protokol)</h3>
+                        <p class="text-slate-400 text-xs leading-relaxed">
+                            Aturan baku bertukar pesan antar perangkat. Mengatur format data, pengalamatan, dan sintaksis (IPv4, TCP, UDP, HTTP).
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Network Scales Preview -->
+                <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+                    <h3 class="font-bold text-lg text-white flex items-center gap-2">
+                        <i data-lucide="scaling" class="w-5 h-5 text-brand-400"></i> Skala Klasifikasi Jaringan
+                    </h3>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs">
+                        <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                            <span class="px-2 py-0.5 rounded bg-blue-500/10 text-blue-400 font-mono font-semibold">LAN</span>
+                            <h4 class="font-semibold text-slate-200 mt-1">Local Area Network</h4>
+                            <p class="text-slate-400 leading-normal">Skala sederhana dalam 1 gedung/rumah/sekolah. Menggunakan kabel UTP / Wi-Fi lokal.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                            <span class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 font-mono font-semibold">MAN</span>
+                            <h4 class="font-semibold text-slate-200 mt-1">Metropolitan Area Network</h4>
+                            <p class="text-slate-400 leading-normal">Kumpulan LAN dalam satu kota/wilayah antar gedung. Media kabel khusus atau wireless outdoor.</p>
+                        </div>
+                        <div class="p-4 rounded-lg bg-slate-950 border border-slate-800 space-y-1">
+                            <span class="px-2 py-0.5 rounded bg-rose-500/10 text-rose-400 font-mono font-semibold">WAN</span>
+                            <h4 class="font-semibold text-slate-200 mt-1">Wide Area Network</h4>
+                            <p class="text-slate-400 leading-normal">Menghubungkan antar negara dan benua. Menggunakan backbone Fiber Optic & Satelit.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-osi" class="tab-content hidden space-y-6">
+                <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-slate-900 p-4 rounded-xl border border-slate-800">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="layers" class="w-5 h-5 text-brand-400"></i> Model Referensi OSI vs TCP/IP
+                        </h2>
+                        <p class="text-xs text-slate-400">Klik pada salah satu layer OSI di bawah untuk melihat pemetaannya ke TCP/IP serta detail fungsinya.</p>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <span class="px-2.5 py-1 rounded bg-slate-800 text-xs text-slate-300 font-mono">7 Layer OSI</span>
+                        <span class="text-slate-600">➔</span>
+                        <span class="px-2.5 py-1 rounded bg-brand-900/60 text-xs text-brand-300 font-mono">4 Layer TCP/IP</span>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                    <!-- OSI Layers Interactive List -->
+                    <div class="lg:col-span-7 space-y-2" id="osi-layers-container">
+                        <!-- OSI Layers rendered dynamically -->
+                    </div>
+
+                    <!-- Selected Layer Detail Card -->
+                    <div class="lg:col-span-5">
+                        <div class="sticky top-24 p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-4" id="layer-detail-card">
+                            <div class="flex items-center justify-between border-b border-slate-800 pb-3">
+                                <span id="detail-layer-num" class="px-2.5 py-1 rounded text-xs font-mono font-bold bg-brand-500/20 text-brand-400">Layer 7</span>
+                                <span id="detail-tcp-mapping" class="text-xs text-slate-400 font-medium">Mapped to: Application</span>
+                            </div>
+                            <div>
+                                <h3 id="detail-layer-name" class="text-xl font-bold text-white">Application Layer</h3>
+                                <p id="detail-layer-desc" class="text-slate-300 text-xs leading-relaxed mt-2">
+                                    Layer tempat terjadinya interaksi antarmuka end user dengan aplikasi yang bekerja menggunakan fungsionalitas jaringan.
+                                </p>
+                            </div>
+                            <div class="space-y-3 border-t border-slate-800 pt-3">
+                                <div>
+                                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Protokol & Service Utama</span>
+                                    <div id="detail-protocols" class="flex flex-wrap gap-1.5">
+                                        <!-- Protocols -->
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Unit Data (PDU)</span>
+                                    <span id="detail-pdu" class="px-2 py-1 rounded bg-slate-800 text-slate-200 text-xs font-mono font-medium">Data</span>
+                                </div>
+                                <div>
+                                    <span class="text-[11px] font-semibold text-slate-400 uppercase tracking-wider block mb-1">Perangkat Terkait</span>
+                                    <span id="detail-devices" class="text-xs text-slate-300">PC, Smartphone, Server</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-simulator" class="tab-content hidden space-y-6">
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 space-y-2">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="sliders" class="w-5 h-5 text-brand-400"></i> Simulator Determinasi Skala Jaringan
+                    </h2>
+                    <p class="text-xs text-slate-400">Pilih parameter jaringan Anda di bawah untuk mengidentifikasi apakah kebutuhan Anda tergolong LAN, MAN, atau WAN.</p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- Options Input Form -->
+                    <div class="p-5 rounded-xl bg-slate-900 border border-slate-800 space-y-4">
+                        <div class="space-y-2">
+                            <label class="text-xs font-semibold text-slate-300 block">1. Jangkauan Geografis</label>
+                            <select id="sim-geo" onchange="calculateNetworkScale()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="lan">Dalam 1 Ruangan / Gedung / Rumah (0 - 1 Km)</option>
+                                <option value="man">Antar Gedung / Wilayah Kota (1 - 50 Km)</option>
+                                <option value="wan">Antar Kota / Negara / Benua (> 50 Km)</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-semibold text-slate-300 block">2. Media Transmisi Utama</label>
+                            <select id="sim-media" onchange="calculateNetworkScale()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="utp">Kabel UTP / Wi-Fi Lokal Short Range</option>
+                                <option value="wireless_outdoor">Kabel Fiber Lokal / Wireless Long Range Outdoor</option>
+                                <option value="fo_backbone">Fiber Optic Submarine / Backbone ISP / Satelit</option>
+                            </select>
+                        </div>
+
+                        <div class="space-y-2">
+                            <label class="text-xs font-semibold text-slate-300 block">3. Jumlah Perangkat Terhubung</label>
+                            <select id="sim-devices" onchange="calculateNetworkScale()" class="w-full bg-slate-950 border border-slate-700 rounded-lg px-3 py-2 text-xs text-slate-200 focus:outline-none focus:border-brand-500">
+                                <option value="small">Scale Kecil - Menengah (&lt; 250 Perangkat)</option>
+                                <option value="medium">Scale Menengah (250 - 5.000 Perangkat)</option>
+                                <option value="large">Scale Masif / Enterprise (&gt; 5.000 Perangkat)</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Simulator Result Box -->
+                    <div class="p-6 rounded-xl bg-gradient-to-br from-slate-900 to-slate-950 border border-brand-500/30 flex flex-col justify-between space-y-4 shadow-xl">
+                        <div>
+                            <span class="text-[11px] font-semibold text-brand-400 uppercase tracking-wider block mb-1">Hasil Diagnostik Skala</span>
+                            <h3 id="sim-result-title" class="text-2xl font-extrabold text-white">LAN (Local Area Network)</h3>
+                            <p id="sim-result-desc" class="text-xs text-slate-300 leading-relaxed mt-2">
+                                Cocok untuk menghubungkan komputer, printer, dan server dalam satu lokasi terbatas menggunakan infrastruktur sederhana.
+                            </p>
+                        </div>
+
+                        <div class="p-4 rounded-lg bg-slate-950/80 border border-slate-800 space-y-2 text-xs">
+                            <div class="flex items-center justify-between text-slate-300">
+                                <span>Rekomendasi Perangkat Utama:</span>
+                                <span id="sim-device-rec" class="font-semibold text-brand-400">Switch L2 & Wireless Router</span>
+                            </div>
+                            <div class="flex items-center justify-between text-slate-300">
+                                <span>Media Transmisi Ideal:</span>
+                                <span id="sim-media-rec" class="font-semibold text-emerald-400">Kabel UTP Cat6 / Wi-Fi 6</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-matrix" class="tab-content hidden space-y-6">
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 space-y-2">
+                    <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                        <i data-lucide="cpu" class="w-5 h-5 text-brand-400"></i> Matriks Komponen & 3 Elemen Jaringan
+                    </h2>
+                    <p class="text-xs text-slate-400">Filter dan pelajari Klasifikasi Elemen (Device, Media, Rule) serta Komponen Jaringan (Network Device, End Host, Interconnection).</p>
+                </div>
+
+                <!-- Filter Controls -->
+                <div class="flex flex-wrap gap-2" id="matrix-filter-buttons">
+                    <button onclick="filterMatrix('all')" class="matrix-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-brand-600 text-white">Semua Komponen</button>
+                    <button onclick="filterMatrix('device')" class="matrix-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white">Device</button>
+                    <button onclick="filterMatrix('media')" class="matrix-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white">Media</button>
+                    <button onclick="filterMatrix('rule')" class="matrix-filter-btn px-3.5 py-1.5 rounded-lg text-xs font-semibold bg-slate-800 text-slate-400 hover:text-white">Rule (Protokol)</button>
+                </div>
+
+                <!-- Matrix Cards Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4" id="matrix-grid">
+                    <!-- Cards loaded dynamically -->
+                </div>
+            </div>
+
+            <div id="tab-quiz" class="tab-content hidden space-y-6">
+                <div class="bg-slate-900 p-6 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="help-circle" class="w-5 h-5 text-brand-400"></i> Kuis Evaluasi Network Fundamentals
+                        </h2>
+                        <p class="text-xs text-slate-400">Uji pemahaman Anda dari materi dasar MTCNA.</p>
+                    </div>
+                    <span id="quiz-score-badge" class="px-3 py-1 rounded-full bg-slate-800 border border-slate-700 text-xs font-mono font-bold text-brand-400">
+                        Skor: 0/100
+                    </span>
+                </div>
+
+                <!-- Quiz Card -->
+                <div class="p-6 rounded-xl bg-slate-900 border border-slate-800 space-y-5" id="quiz-box">
+                    <div class="flex items-center justify-between text-xs text-slate-400 border-b border-slate-800 pb-3">
+                        <span id="quiz-progress-text">Pertanyaan 1 dari 5</span>
+                        <span id="quiz-category" class="font-mono text-brand-400">Komponen Jaringan</span>
+                    </div>
+
+                    <h3 id="quiz-question-text" class="text-base font-bold text-white leading-relaxed">
+                        Loading pertanyaan...
+                    </h3>
+
+                    <!-- Options -->
+                    <div id="quiz-options-container" class="space-y-2.5">
+                        <!-- Rendered by JS -->
+                    </div>
+
+                    <!-- Explanation Box -->
+                    <div id="quiz-explanation-box" class="hidden p-4 rounded-lg bg-slate-950 border border-brand-500/30 text-xs space-y-1">
+                        <span class="font-bold text-brand-400 block">Penjelasan:</span>
+                        <p id="quiz-explanation-text" class="text-slate-300 leading-relaxed"></p>
+                    </div>
+
+                    <!-- Action Buttons -->
+                    <div class="flex justify-end pt-2">
+                        <button id="quiz-next-btn" onclick="nextQuestion()" class="hidden px-5 py-2.5 rounded-xl bg-brand-600 hover:bg-brand-500 text-white text-xs font-semibold shadow-lg shadow-brand-600/30 transition-all">
+                            Pertanyaan Selanjutnya ➔
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-terminal" class="tab-content hidden space-y-4">
+                <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 flex items-center justify-between">
+                    <div>
+                        <h2 class="text-lg font-bold text-white flex items-center gap-2">
+                            <i data-lucide="terminal" class="w-5 h-5 text-emerald-400"></i> Practical CLI Terminal Simulator
+                        </h2>
+                        <p class="text-xs text-slate-400">Cobalah perintah: <code class="text-emerald-400 font-mono">ipconfig /all</code>, <code class="text-emerald-400 font-mono">ping 8.8.8.8</code>, <code class="text-emerald-400 font-mono">tracert google.com</code>, <code class="text-emerald-400 font-mono">nslookup mikrotik.com</code></p>
+                    </div>
+                    <button onclick="clearTerminal()" class="px-3 py-1.5 rounded bg-slate-800 hover:bg-slate-700 text-xs text-slate-300 font-medium border border-slate-700">
+                        Clear Terminal
+                    </button>
+                </div>
+
+                <!-- Terminal Window -->
+                <div class="rounded-xl bg-slate-950 border border-slate-800 overflow-hidden font-mono shadow-2xl">
+                    <div class="bg-slate-900 px-4 py-2 border-b border-slate-800 flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-rose-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-amber-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-emerald-500/80"></div>
+                        <span class="text-xs text-slate-400 font-sans ml-2">Command Prompt - Windows Environment [Version 10.0.19045]</span>
+                    </div>
+
+                    <div id="terminal-body" class="p-4 h-96 overflow-y-auto custom-scrollbar text-xs text-slate-200 space-y-3 leading-relaxed">
+                        <p class="text-slate-400">Microsoft Windows [Version 10.0.19045.3803]<br>(c) Microsoft Corporation. All rights reserved.</p>
+                        <p class="text-slate-400">Ketik perintah diagnosis jaringan di bawah ini...</p>
+                    </div>
+
+                    <div class="bg-slate-900/50 px-4 py-2 border-t border-slate-800 flex items-center gap-2">
+                        <span class="text-emerald-400 text-xs font-bold">C:\Users\Admin&gt;</span>
+                        <input type="text" id="terminal-input" onkeydown="handleTerminalKey(event)" class="flex-1 bg-transparent border-none text-xs text-white focus:outline-none font-mono" placeholder="Ketik ipconfig, ping, tracert, nslookup..." autofocus>
+                    </div>
+                </div>
+            </div>
+
+        </section>
+    </main>
+
+    <script>
+        const osiData = [
+            {
+                layer: 7,
+                name: "Application Layer",
+                tcpMapping: "Application Layer",
+                desc: "Layer tempat terjadinya interaksi antarmuka end user dengan aplikasi yang bekerja menggunakan fungsionalitas jaringan.",
+                protocols: ["HTTP", "HTTPS", "FTP", "SMTP", "DNS", "DHCP"],
+                pdu: "Data",
+                devices: "PC, Smartphone, Server, IP Phone"
+            },
+            {
+                layer: 6,
+                name: "Presentation Layer",
+                tcpMapping: "Application Layer",
+                desc: "Bekerja dengan mentranslasikan format data yang hendak ditransmisikan oleh aplikasi ke format jaringan. Di sini data di-enkripsi atau di-dekripsi.",
+                protocols: ["SSL/TLS", "JPEG", "ASCII", "MPEG"],
+                pdu: "Data",
+                devices: "Sistem Operasi / Application Engine"
+            },
+            {
+                layer: 5,
+                name: "Session Layer",
+                tcpMapping: "Application Layer",
+                desc: "Mendefinisikan bagaimana koneksi dapat dibuat, dipelihara, atau dihancurkan. Mengatur kontrol dialog antar host.",
+                protocols: ["NFS", "SMB", "NetBIOS", "RPC"],
+                pdu: "Data",
+                devices: "Sistem Operasi / Network Session Manager"
+            },
+            {
+                layer: 4,
+                name: "Transport Layer",
+                tcpMapping: "Transport Layer",
+                desc: "Melakukan pemecahan data ke dalam paket/segment, memberikan nomor urut, serta menentukan protokol transmisi (TCP/UDP) dan konfirmasi penerimaan (ACK).",
+                protocols: ["TCP", "UDP"],
+                pdu: "Segment (TCP) / Datagram (UDP)",
+                devices: "Firewall, Port Gateway"
+            },
+            {
+                layer: 3,
+                name: "Network Layer",
+                tcpMapping: "Internet Layer",
+                desc: "Membuat header untuk paket yang berisi IP pengirim dan tujuan. Melakukan fungsi routing untuk menentukan jalur terbaik pengiriman data.",
+                protocols: ["IPv4", "IPv6", "ICMP", "IPsec", "OSPF", "BGP"],
+                pdu: "Packet",
+                devices: "Router, Layer 3 Switch"
+            },
+            {
+                layer: 2,
+                name: "Data Link Layer",
+                tcpMapping: "Network Access Layer",
+                desc: "Menentukan bagaimana bit data dikelompokkan menjadi Frame. Menangani pengalamatan fisik (MAC Address) dan koreksi kesalahan. Terbagi jadi LLC & MAC.",
+                protocols: ["Ethernet (802.3)", "Wi-Fi (802.11)", "PPP", "ARP"],
+                pdu: "Frame",
+                devices: "Switch Layer 2, Bridge, NIC, Access Point"
+            },
+            {
+                layer: 1,
+                name: "Physical Layer",
+                tcpMapping: "Network Access Layer",
+                desc: "Mendefinisikan media transmisi fisik, metode pensinyalan, sinkronisasi bit, topologi jaringan, serta pengabelan.",
+                protocols: ["100BASE-T", "1000BASE-T", "Fiber Optics Standard", "Bluetooth"],
+                pdu: "Bit (0 & 1)",
+                devices: "Kabel UTP/STP, Fiber Optic, HUB, Repeater, Konektor RJ45"
+            }
+        ];
+
+        const matrixData = [
+            { name: "Router", category: "device", subcat: "Network Device", desc: "Perangkat yang berfungsi menghubungkan antar jaringan yang berbeda subnet & rute." },
+            { name: "Switch Layer 2", category: "device", subcat: "Network Device", desc: "Perangkat yang menghubungkan perangkat dalam satu LAN menggunakan MAC Address." },
+            { name: "PC / Laptop", category: "device", subcat: "End Host", desc: "Perangkat pengguna akhir (end device) tempat aplikasi dijalankan." },
+            { name: "Smartphone", category: "device", subcat: "End Host", desc: "End device nirkabel yang bertukar informasi data melalui jaringan Wi-Fi/Seluler." },
+            { name: "Kabel UTP / Cat6", category: "media", subcat: "Interconnection", desc: "Media transmisi berbasis tembaga untuk koneksi fisik LAN." },
+            { name: "Fiber Optic", category: "media", subcat: "Interconnection", desc: "Media transmisi berbasis cahaya berkecepatan tinggi untuk jarak jauh/WAN." },
+            { name: "Wireless Signal", category: "media", subcat: "Interconnection", desc: "Media nirkabel menggunakan gelombang elektromagnetik (Wi-Fi)." },
+            { name: "Protokol IPv4", category: "rule", subcat: "Rule", desc: "Aturan pengalamatan logika 32-bit untuk pengiriman paket di Network Layer." },
+            { name: "Protokol TCP", category: "rule", subcat: "Rule", desc: "Aturan komunikasi Transport Layer yang andal (Connection-oriented)." }
+        ];
+
+        const quizQuestions = [
+            {
+                q: "Komponen jaringan yang mencakup NIC, konektor, dan media transmisi (kabel/wireless) disebut...",
+                options: ["Network Device", "End Host", "Interconnection", "Rule"],
+                ans: 2,
+                category: "Komponen Jaringan",
+                exp: "Interconnection merupakan media penghubung seperti NIC, kabel UTP/FO, konektor RJ45, dan wireless."
+            },
+            {
+                q: "Jaringan yang menghubungkan antar negara dan benua dengan media utama Fiber Optic adalah...",
+                options: ["LAN", "MAN", "WAN", "WLAN"],
+                ans: 2,
+                category: "Skala Jaringan",
+                exp: "WAN (Wide Area Network) memiliki jangkauan geografis paling luas (antar negara/benua)."
+            },
+            {
+                q: "Tiga elemen dasar utama yang wajib dipahami jika ingin membangun sebuah jaringan adalah...",
+                options: ["IP Address, MAC Address, Subnet", "Device, Media, Rule", "Router, Switch, Hub", "LAN, MAN, WAN"],
+                ans: 1,
+                category: "Element Network",
+                exp: "Untuk membangun jaringan kita butuh Device (perangkat), Media (penghubung), dan Rule (protokol komunikasi)."
+            },
+            {
+                q: "Layer OSI yang berfungsi membuat header IP pengirim & tujuan serta melakukan proses routing adalah...",
+                options: ["Data Link Layer", "Transport Layer", "Network Layer", "Application Layer"],
+                ans: 2,
+                category: "OSI Layer",
+                exp: "Network Layer (Layer 3) bertanggung jawab atas pengalamatan IP logika dan penentuan jalur (routing)."
+            },
+            {
+                q: "Dalam pemetaan Model TCP/IP, Layer Physical (Layer 1) dan Data Link (Layer 2) OSI digabungkan menjadi...",
+                options: ["Application Layer", "Internet Layer", "Transport Layer", "Network Access Layer"],
+                ans: 3,
+                category: "TCP/IP Model",
+                exp: "TCP/IP Model menggabungkan fungsi Physical dan Data Link Layer menjadi Network Access Layer."
+            }
+        ];
+
+        let currentTab = 'overview';
+        let currentQuizIndex = 0;
+        let quizScore = 0;
+        let selectedQuizOption = null;
+        let visitedTabs = new Set(['overview']);
+
+        function switchTab(tabId) {
+            currentTab = tabId;
+            visitedTabs.add(tabId);
+            
+            // Hide all tab content
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+
+            // Reset navigation styles
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/25');
+                btn.classList.add('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-900');
+            });
+
+            // Highlight active navigation button
+            const activeBtn = document.getElementById(`nav-${tabId}`);
+            if (activeBtn) {
+                activeBtn.classList.remove('text-slate-400', 'hover:text-slate-200', 'hover:bg-slate-900');
+                activeBtn.classList.add('bg-brand-600', 'text-white', 'shadow-lg', 'shadow-brand-600/25');
+            }
+
+            updateOverallProgress();
+        }
+
+        function updateOverallProgress() {
+            // Calculated based on visited tabs and quiz completion
+            const totalItems = 6;
+            const percentage = Math.round((visitedTabs.size / totalItems) * 100);
+            document.getElementById('overall-progress-bar').style.width = `${percentage}%`;
+            document.getElementById('overall-progress-text').innerText = `${percentage}%`;
+        }
+
+        function renderOSILayers() {
+            const container = document.getElementById('osi-layers-container');
+            container.innerHTML = osiData.map((item, index) => `
+                <div onclick="selectOSILayer(${item.layer})" class="layer-card cursor-pointer p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-brand-500/50 flex items-center justify-between group" id="osi-card-${item.layer}">
+                    <div class="flex items-center space-x-3">
+                        <span class="w-8 h-8 rounded-lg bg-slate-800 text-brand-400 group-hover:bg-brand-600 group-hover:text-white font-mono font-bold text-xs flex items-center justify-center transition-all">
+                            L${item.layer}
+                        </span>
+                        <div>
+                            <h4 class="font-bold text-slate-200 text-sm group-hover:text-white">${item.name}</h4>
+                            <p class="text-[11px] text-slate-400">PDU: <span class="font-mono text-slate-300">${item.pdu}</span></p>
+                        </div>
+                    </div>
+                    <span class="text-xs px-2.5 py-1 rounded-md bg-slate-950 border border-slate-800 text-slate-400 font-mono">
+                        ${item.tcpMapping}
+                    </span>
+                </div>
+            `).join('');
+
+            selectOSILayer(7);
+        }
+
+        function selectOSILayer(layerNum) {
+            const data = osiData.find(d => d.layer === layerNum);
+            if (!data) return;
+
+            // Highlight selected card
+            document.querySelectorAll('.layer-card').forEach(card => card.classList.remove('border-brand-500', 'bg-brand-950/20'));
+            const selectedCard = document.getElementById(`osi-card-${layerNum}`);
+            if (selectedCard) selectedCard.classList.add('border-brand-500', 'bg-brand-950/20');
+
+            // Update Detail Card
+            document.getElementById('detail-layer-num').innerText = `Layer ${data.layer}`;
+            document.getElementById('detail-layer-name').innerText = data.name;
+            document.getElementById('detail-layer-desc').innerText = data.desc;
+            document.getElementById('detail-tcp-mapping').innerText = `Mapped to: ${data.tcpMapping}`;
+            document.getElementById('detail-pdu').innerText = data.pdu;
+            document.getElementById('detail-devices').innerText = data.devices;
+
+            const protoContainer = document.getElementById('detail-protocols');
+            protoContainer.innerHTML = data.protocols.map(p => `
+                <span class="px-2 py-0.5 rounded bg-brand-500/10 text-brand-400 border border-brand-500/20 font-mono text-[11px]">${p}</span>
+            `).join('');
+        }
+
+        function calculateNetworkScale() {
+            const geo = document.getElementById('sim-geo').value;
+            const media = document.getElementById('sim-media').value;
+            const devices = document.getElementById('sim-devices').value;
+
+            const title = document.getElementById('sim-result-title');
+            const desc = document.getElementById('sim-result-desc');
+            const devRec = document.getElementById('sim-device-rec');
+            const medRec = document.getElementById('sim-media-rec');
+
+            if (geo === 'lan' && media === 'utp') {
+                title.innerText = "LAN (Local Area Network)";
+                desc.innerText = "Jaringan skala terbatas (gedung/rumah) dengan kecepatan transfer lokal tinggi dan latensi sangat rendah.";
+                devRec.innerText = "Switch L2 & Wireless Router";
+                medRec.innerText = "Kabel UTP Cat6 / Wi-Fi 6";
+            } else if (geo === 'man' || media === 'wireless_outdoor') {
+                title.innerText = "MAN (Metropolitan Area Network)";
+                desc.innerText = "Jaringan antar gedung dalam satu kota/wilayah. Menghubungkan beberapa node LAN secara terintegrasi.";
+                devRec.innerText = "Router Mikrotik / Switch L3 Outdoor";
+                medRec.innerText = "Fiber Optic Single-Mode / Wireless PtP";
+            } else {
+                title.innerText = "WAN (Wide Area Network)";
+                desc.innerText = "Jaringan skala geografis sangat luas (antar kota/negara). Menggunakan backbone ISP global.";
+                devRec.innerText = "High-End Border Router (BGP)";
+                medRec.innerText = "Submarine Fiber Optic / Satellite Link";
+            }
+        }
+
+        function renderMatrix(filter = 'all') {
+            const container = document.getElementById('matrix-grid');
+            const filtered = filter === 'all' ? matrixData : matrixData.filter(m => m.category === filter);
+
+            container.innerHTML = filtered.map(item => `
+                <div class="p-4 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition-all space-y-2">
+                    <div class="flex items-center justify-between">
+                        <span class="px-2 py-0.5 rounded text-[10px] font-semibold uppercase tracking-wider ${
+                            item.category === 'device' ? 'bg-blue-500/10 text-blue-400 border border-blue-500/20' :
+                            item.category === 'media' ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20' :
+                            'bg-purple-500/10 text-purple-400 border border-purple-500/20'
+                        }">${item.subcat}</span>
+                    </div>
+                    <h4 class="font-bold text-white text-sm">${item.name}</h4>
+                    <p class="text-xs text-slate-400 leading-relaxed">${item.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function filterMatrix(cat) {
+            document.querySelectorAll('.matrix-filter-btn').forEach(btn => {
+                btn.classList.remove('bg-brand-600', 'text-white');
+                btn.classList.add('bg-slate-800', 'text-slate-400');
+            });
+            event.target.classList.remove('bg-slate-800', 'text-slate-400');
+            event.target.classList.add('bg-brand-600', 'text-white');
+
+            renderMatrix(cat);
+        }
+
+        function loadQuizQuestion() {
+            const q = quizQuestions[currentQuizIndex];
+            selectedQuizOption = null;
+
+            document.getElementById('quiz-progress-text').innerText = `Pertanyaan ${currentQuizIndex + 1} dari ${quizQuestions.length}`;
+            document.getElementById('quiz-category').innerText = q.category;
+            document.getElementById('quiz-question-text').innerText = q.q;
+
+            const optionsContainer = document.getElementById('quiz-options-container');
+            optionsContainer.innerHTML = q.options.map((opt, idx) => `
+                <button onclick="selectQuizOption(${idx})" id="quiz-opt-${idx}" class="w-full text-left p-3.5 rounded-xl bg-slate-950 border border-slate-800 hover:border-slate-700 text-xs text-slate-200 transition-all flex items-center justify-between">
+                    <span>${String.fromCharCode(65 + idx)}. ${opt}</span>
+                    <i data-lucide="circle" class="w-4 h-4 text-slate-600"></i>
+                </button>
+            `).join('');
+
+            document.getElementById('quiz-explanation-box').classList.add('hidden');
+            document.getElementById('quiz-next-btn').classList.add('hidden');
+            lucide.createIcons();
+        }
+
+        function selectQuizOption(index) {
+            if (selectedQuizOption !== null) return; // Prevent changing answer
+            selectedQuizOption = index;
+
+            const q = quizQuestions[currentQuizIndex];
+            const isCorrect = index === q.ans;
+
+            if (isCorrect) {
+                quizScore += 20;
+                document.getElementById(`quiz-opt-${index}`).classList.add('border-emerald-500', 'bg-emerald-950/30', 'text-emerald-300');
+            } else {
+                document.getElementById(`quiz-opt-${index}`).classList.add('border-rose-500', 'bg-rose-950/30', 'text-rose-300');
+                document.getElementById(`quiz-opt-${q.ans}`).classList.add('border-emerald-500', 'bg-emerald-950/30', 'text-emerald-300');
+            }
+
+            document.getElementById('quiz-score-badge').innerText = `Skor: ${quizScore}/100`;
+            document.getElementById('quiz-explanation-text').innerText = q.exp;
+            document.getElementById('quiz-explanation-box').classList.remove('hidden');
+            document.getElementById('quiz-next-btn').classList.remove('hidden');
+        }
+
+        function nextQuestion() {
+            if (currentQuizIndex < quizQuestions.length - 1) {
+                currentQuizIndex++;
+                loadQuizQuestion();
+            } else {
+                showQuizResults();
+            }
+        }
+
+        function showQuizResults() {
+            const box = document.getElementById('quiz-box');
+            box.innerHTML = `
+                <div class="text-center py-8 space-y-4">
+                    <div class="w-16 h-16 rounded-full bg-brand-500/20 text-brand-400 flex items-center justify-center mx-auto text-2xl font-bold">
+                        🏆
+                    </div>
+                    <h3 class="text-xl font-bold text-white">Kuis Selesai!</h3>
+                    <p class="text-xs text-slate-300">Skor Akhir Anda adalah <span class="font-bold text-emerald-400 font-mono text-base">${quizScore}/100</span></p>
+                    <button onclick="restartQuiz()" class="px-4 py-2 rounded-xl bg-brand-600 text-white text-xs font-semibold">
+                        Ulangi Kuis
+                    </button>
+                </div>
+            `;
+        }
+
+        function restartQuiz() {
+            currentQuizIndex = 0;
+            quizScore = 0;
+            document.getElementById('quiz-score-badge').innerText = `Skor: 0/100`;
+            location.reload();
+        }
+
+        function handleTerminalKey(e) {
+            if (e.key === 'Enter') {
+                const input = document.getElementById('terminal-input');
+                const cmd = input.value.trim().toLowerCase();
+                input.value = '';
+
+                if (!cmd) return;
+
+                const body = document.getElementById('terminal-body');
+                body.innerHTML += `<p><span class="text-emerald-400">C:\\Users\\Admin&gt;</span> ${cmd}</p>`;
+
+                processCommand(cmd, body);
+                body.scrollTop = body.scrollHeight;
+            }
+        }
+
+        function processCommand(cmd, body) {
+            let output = '';
+            if (cmd === 'ipconfig' || cmd === 'ipconfig /all') {
+                output = `
+Ethernet adapter Ethernet 0:
+   Connection-specific DNS Suffix  . : localdomain
+   IPv4 Address. . . . . . . . . . . : 192.168.1.105
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1
+   Physical Address (MAC)  . . . . . : 00-0C-29-8D-4F-11
+                `;
+            } else if (cmd.startsWith('ping')) {
+                const target = cmd.split(' ')[1] || '8.8.8.8';
+                output = `
+Pinging ${target} with 32 bytes of data:
+Reply from ${target}: bytes=32 time=14ms TTL=117
+Reply from ${target}: bytes=32 time=12ms TTL=117
+Reply from ${target}: bytes=32 time=15ms TTL=117
+Reply from ${target}: bytes=32 time=13ms TTL=117
+
+Ping statistics for ${target}:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = 12ms, Maximum = 15ms, Average = 13ms
+                `;
+            } else if (cmd.startsWith('tracert') || cmd.startsWith('traceroute')) {
+                const target = cmd.split(' ')[1] || 'google.com';
+                output = `
+Tracing route to ${target} over a maximum of 30 hops:
+  1     1 ms     1 ms     1 ms  192.168.1.1 (Gateway)
+  2    10 ms     9 ms     8 ms  10.120.0.1 (ISP Edge Router)
+  3    14 ms    15 ms    14 ms  172.16.20.5 (Backbone ISP)
+  4    13 ms    13 ms    14 ms  ${target}
+
+Trace complete.
+                `;
+            } else if (cmd.startsWith('nslookup')) {
+                const domain = cmd.split(' ')[1] || 'mikrotik.com';
+                output = `
+Server:  UnKnown
+Address:  192.168.1.1
+
+Non-authoritative answer:
+Name:    ${domain}
+Addresses:  159.148.86.7
+                `;
+            } else if (cmd === 'cls' || cmd === 'clear') {
+                clearTerminal();
+                return;
+            } else {
+                output = `'${cmd}' is not recognized as an internal command. Type 'ipconfig', 'ping', 'tracert', or 'nslookup'.`;
+            }
+
+            body.innerHTML += `<pre class="text-slate-300 font-mono text-[11px] leading-tight my-1">${output}</pre>`;
+        }
+
+        function clearTerminal() {
+            document.getElementById('terminal-body').innerHTML = `
+                <p class="text-slate-400">Microsoft Windows [Version 10.0.19045.3803]<br>(c) Microsoft Corporation. All rights reserved.</p>
+                <p class="text-slate-400">Ketik perintah diagnosis jaringan di bawah ini...</p>
+            `;
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderOSILayers();
+            renderMatrix();
+            loadQuizQuestion();
+            calculateNetworkScale();
+            lucide.createIcons();
+        });
+    </script>
+</body>
+</html>
